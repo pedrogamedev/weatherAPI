@@ -14,6 +14,9 @@ public class WeatherService {
     @Autowired
     RestTemplate restTemplate;
 
+    @Autowired
+    ObjectMapper mapper;
+
     @Value("${weather_api}")
     String key;
 
@@ -24,7 +27,6 @@ public class WeatherService {
 
         String response = restTemplate.getForObject( url , String.class);
 
-        ObjectMapper mapper = new ObjectMapper();
 
         return mapper.readValue(response, WeatherResponse.class);
     }
