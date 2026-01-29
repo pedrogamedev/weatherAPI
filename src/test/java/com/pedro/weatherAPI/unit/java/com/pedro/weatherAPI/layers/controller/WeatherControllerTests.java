@@ -41,7 +41,7 @@ public class WeatherControllerTests {
     }
 
     @Test
-    public void getWeather_ValidaDate_ReturnsOkAndTemp(){
+    public void getWeather_ValidDate_ReturnsOkAndTemp(){
         when(weatherService.getWeather(weatherRequest)).thenReturn(weatherResponse);
 
         ResponseEntity<WeatherResponse> response = weatherController.getWeather(weatherRequest);
