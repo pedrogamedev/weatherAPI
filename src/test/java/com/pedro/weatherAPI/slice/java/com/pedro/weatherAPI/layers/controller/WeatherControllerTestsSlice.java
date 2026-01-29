@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @WebMvcTest(controllers = WeatherController.class)
 @AutoConfigureMockMvc(addFilters = false)
-public class AuthenticationControllerTestsSlice {
+public class WeatherControllerTestsSlice {
 
     @MockitoBean
     WeatherService weatherService;

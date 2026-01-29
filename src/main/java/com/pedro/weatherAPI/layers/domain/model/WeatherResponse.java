@@ -5,13 +5,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class WeatherResponse {
 
-    String location;
-    String feelslike;
-    Double temp;
+    String resolvedAddress;
+    ArrayList<Day> days;
 }

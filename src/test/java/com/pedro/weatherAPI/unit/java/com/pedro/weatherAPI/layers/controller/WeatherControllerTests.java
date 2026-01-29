@@ -1,6 +1,7 @@
 package com.pedro.weatherAPI.unit.java.com.pedro.weatherAPI.layers.controller;
 
 import com.pedro.weatherAPI.layers.controller.WeatherController;
+import com.pedro.weatherAPI.layers.domain.model.Day;
 import com.pedro.weatherAPI.layers.domain.model.WeatherRequest;
 import com.pedro.weatherAPI.layers.domain.model.WeatherResponse;
 import com.pedro.weatherAPI.layers.services.WeatherService;
@@ -15,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -30,10 +32,12 @@ public class WeatherControllerTests {
 
     WeatherRequest weatherRequest;
     WeatherResponse weatherResponse;
+    ArrayList<Day> days;
 
     public void Init(){
+        days = new ArrayList<>();
         weatherRequest = new WeatherRequest("aa", LocalDate.of(2026,01,01),LocalDate.of(2026, 01, 05));
-        weatherResponse = new WeatherResponse("a","a", 10.0);
+        weatherResponse = new WeatherResponse("a", days);
     }
 
     @Test
