@@ -10,6 +10,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.method.annotation.MethodArgumentConversionNotSupportedException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
@@ -18,6 +19,18 @@ import java.net.URI;
 @RestControllerAdvice
 public class GlobalControllerExceptionHandler {
 
+    @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
+    @ExceptionHandler(HttpClientErrorException.class)
+    public ProblemDetail handleHttpClientErrorException(HttpClientErrorException exception){
+        ProblemDetail detail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.TOO_MANY_REQUESTS,
+                exception.getMessage()
+        );
+        detail.setTitle("Request limit exceeded.");
+        detail.setDetail("3rd party api error.");
+        detail.setType(URI.create("about:blank"));
+        return detail;
+    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -110,5 +123,6 @@ public class GlobalControllerExceptionHandler {
         detail.setType(URI.create("about:blank"));
         return detail;
     }
+
 
 }

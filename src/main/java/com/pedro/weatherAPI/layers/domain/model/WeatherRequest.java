@@ -1,5 +1,6 @@
 package com.pedro.weatherAPI.layers.domain.model;
 
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
