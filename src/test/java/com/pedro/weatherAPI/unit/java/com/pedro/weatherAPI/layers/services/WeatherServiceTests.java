@@ -64,6 +64,7 @@ public class WeatherServiceTests {
                 DateValidator.validateNotFutureDate(weatherRequest.getStartDate());
                 DateValidator.validateNotFutureDate(weatherRequest.getEndDate());
                 DateValidator.validateEndAfterStart(weatherRequest.getStartDate(), weatherRequest.getEndDate());
+                DateValidator.validateHowManyDays(weatherRequest.getStartDate(), weatherRequest.getEndDate());
             } );
         }
     }

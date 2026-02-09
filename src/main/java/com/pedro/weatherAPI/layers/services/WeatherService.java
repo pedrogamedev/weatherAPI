@@ -29,7 +29,10 @@ public class WeatherService {
         DateValidator.validateNotFutureDate(request.getStartDate());
         DateValidator.validateNotFutureDate(request.getEndDate());
         DateValidator.validateEndAfterStart(request.getStartDate(), request.getEndDate());
+        DateValidator.validateHowManyDays(request.getStartDate(), request.getEndDate());
         String url;
+
+        //make 2 exceptions here 1 for too many requests and antoher for too many days
         try{
             url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/"
                     +request.getLocation()+"/"+request.getStartDate()+"/"+ request.getEndDate()+"?key="+key;

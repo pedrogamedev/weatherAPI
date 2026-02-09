@@ -1,6 +1,7 @@
 package com.pedro.weatherAPI.others;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 
 public class DateValidator {
@@ -20,6 +21,12 @@ public class DateValidator {
     public static void validateEndAfterStart(LocalDate startDate, LocalDate endDate) {
         if (startDate.isAfter(endDate)) {
             throw new IllegalArgumentException("Start date cannot be after endDate.");
+        }
+    }
+
+    public static void validateHowManyDays (LocalDate startDate, LocalDate endDate){
+        if(ChronoUnit.DAYS.between(startDate, endDate) > 5){
+            throw new IllegalArgumentException("The maximum gap between the dates is 5 days.");
         }
     }
 }
