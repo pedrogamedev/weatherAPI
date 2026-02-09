@@ -5,7 +5,6 @@ import com.pedro.weatherAPI.layers.domain.model.WeatherResponse;
 import com.pedro.weatherAPI.layers.services.WeatherService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
