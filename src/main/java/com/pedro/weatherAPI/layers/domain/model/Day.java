@@ -1,5 +1,6 @@
 package com.pedro.weatherAPI.layers.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -7,8 +8,16 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 public class Day {
-    String datetime;
-    Double temp;
-    Double feelslike;
-    String description;
+
+    @JsonProperty("datetime")
+    private String datetime;
+
+    @JsonProperty("temp")
+    private double temp;
+
+    @JsonProperty("feelslike")
+    private double feelslike;
+
+    @JsonProperty("description")
+    private String description;
 }
