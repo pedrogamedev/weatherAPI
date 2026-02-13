@@ -37,12 +37,17 @@ public class WeatherService {
         DateValidator.validateHowManyDays(request.getStartDate(), request.getEndDate());
         String url;
 
+        String url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/"
+                +request.getLocation()+"/"+request.getStartDate()+"/"+ request.getEndDate()+"?key="+key;
+        String response;
         try{
-            url = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/"
-                    +request.getLocation()+"/"+request.getStartDate()+"/"+ request.getEndDate()+"?key="+key;
+            response = restTemplate.getForObject(url, String.class);
         }
         catch (HttpClientErrorException e){
-            throw new HttpClientErrorException(e.getStatusCode());
+            if(e.getMessage().contains("Bad API Request:No valid locations could be determined from the input")){
+                throw new CityNotFoundException("City "+ request.getLocation() + " not found exception.");
+            }
+            throw new HttpClientErrorException(HttpStatus.TOO_MANY_REQUESTS, "3rd party request limit exceeded,");
         }
         String response = restTemplate.getForObject(url, String.class);
         System.out.println("Raw Response: " + response);

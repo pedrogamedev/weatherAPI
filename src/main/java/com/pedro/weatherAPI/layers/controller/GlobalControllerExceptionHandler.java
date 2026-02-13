@@ -2,6 +2,7 @@ package com.pedro.weatherAPI.layers.controller;
 
 
 
+import com.pedro.weatherAPI.others.exceptions.CityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -27,11 +28,10 @@ public class GlobalControllerExceptionHandler {
                 exception.getMessage()
         );
         detail.setTitle("Request limit exceeded.");
-        detail.setDetail("3rd party api error.");
+        detail.setDetail(exception.getMessage());
         detail.setType(URI.create("about:blank"));
         return detail;
     }
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handleMethodArgumentNotFoundException(MethodArgumentNotValidException exception){
@@ -124,5 +124,18 @@ public class GlobalControllerExceptionHandler {
         return detail;
     }
 
+
+    @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
+    @ExceptionHandler(CityNotFoundException.class)
+    public ProblemDetail handleCityNotFoundException(CityNotFoundException exception){
+        ProblemDetail detail = ProblemDetail.forStatusAndDetail(
+                HttpStatus.BAD_REQUEST,
+                exception.getMessage()
+        );
+        detail.setTitle("City not found.");
+        detail.setDetail(exception.getMessage());
+        detail.setType(URI.create("about:blank"));
+        return detail;
+    }
 
 }
