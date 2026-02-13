@@ -48,19 +48,13 @@ public class AppConfig {
     }
 
     @Bean
-    public RedisCacheConfiguration cacheConfiguration(){
-        return RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofSeconds(20L))
-                .disableCachingNullValues()
-                .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJacksonJsonRedisSerializer(objectMapper())));
-    }
-
-    @Bean
     public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
         JacksonJsonRedisSerializer<WeatherResponse> serializer =
                 new JacksonJsonRedisSerializer<>(WeatherResponse.class);
 
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+                .entryTtl(Duration.ofMinutes(10))
+                .disableCachingNullValues()
                 .serializeValuesWith(
                         RedisSerializationContext.SerializationPair.fromSerializer(serializer)
                 );
