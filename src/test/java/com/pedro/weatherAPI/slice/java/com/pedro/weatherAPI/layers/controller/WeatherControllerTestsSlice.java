@@ -11,6 +11,8 @@ import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -19,11 +21,14 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @WebMvcTest(controllers = WeatherController.class)
-@AutoConfigureMockMvc(addFilters = false)
+@EnableCaching
 public class WeatherControllerTestsSlice {
 
     @MockitoBean
     WeatherService weatherService;
+
+    @MockitoBean
+    CacheManager cacheManager;
 
     @Autowired
     MockMvc mockMvc;
