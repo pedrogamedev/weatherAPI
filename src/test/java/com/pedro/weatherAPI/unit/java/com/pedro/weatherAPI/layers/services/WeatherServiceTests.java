@@ -15,13 +15,18 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,11 +39,14 @@ public class WeatherServiceTests {
     RestTemplate restTemplate;
     @Mock
     ObjectMapper mapper;
+    @Mock
+     RedisTemplate<String, Object> redisTemplate;
 
     WeatherRequest weatherRequest;
     WeatherResponse weatherResponse;
     ArrayList<Day> days;
     String jsonResponse;
+
 
     @BeforeEach
     public void Init(){
@@ -52,14 +60,15 @@ public class WeatherServiceTests {
     @Test
     public void getWeather_ValidWeatherRequest_ReturnsWeatherResponse(){
         when(restTemplate.getForObject(Mockito.anyString(), Mockito.eq(String.class))).thenReturn(jsonResponse);
-        when(mapper.readValue(jsonResponse, WeatherResponse.class)).thenReturn(weatherResponse);
+        when(mapper.readValue(Mockito.anyString(), Mockito.any(TypeReference.class))).thenReturn(weatherResponse);
         try (MockedStatic<DateValidator> mocked =
                      mockStatic(DateValidator.class)) {
             WeatherResponse response = service.getWeather(weatherRequest);
 
             Assertions.assertThat(response).isNotNull();
             verify(restTemplate).getForObject(Mockito.anyString(), Mockito.eq(String.class));
-            verify(mapper).readValue(jsonResponse, WeatherResponse.class);
+            verify(mapper).readValue(Mockito.anyString(), Mockito.any(TypeReference.class));
+
             mocked.verify(() ->{
                 DateValidator.validateNotFutureDate(weatherRequest.getStartDate());
                 DateValidator.validateNotFutureDate(weatherRequest.getEndDate());
@@ -67,5 +76,35 @@ public class WeatherServiceTests {
                 DateValidator.validateHowManyDays(weatherRequest.getStartDate(), weatherRequest.getEndDate());
             } );
         }
+    }
+
+    @Test
+    public void getWeather_ApiRateLimitExceeded_ThrowsHttpClientErrorException() {
+        HttpClientErrorException tooManyRequestsException = new HttpClientErrorException(
+                HttpStatus.TOO_MANY_REQUESTS, "3rd party request limit exceeded,");
+
+        when(restTemplate.getForObject(Mockito.anyString(), Mockito.eq(String.class)))
+                .thenThrow(tooManyRequestsException);
+
+        HttpClientErrorException thrownException = assertThrows(HttpClientErrorException.class, () -> {
+            service.getWeather(weatherRequest);
+        });
+
+        Assertions.assertThat(thrownException.getStatusCode()).isEqualTo(HttpStatus.TOO_MANY_REQUESTS);
+        Assertions.assertThat(thrownException.getMessage()).contains("3rd party request limit exceeded,");
+    }
+
+    @Test
+    public void getWeather_ApiThrowsUnexpectedException_ThrowsException() {
+        RuntimeException unexpectedException = new RuntimeException("Unexpected error occurred");
+
+        when(restTemplate.getForObject(Mockito.anyString(), Mockito.eq(String.class)))
+                .thenThrow(unexpectedException);
+
+        RuntimeException thrownException = assertThrows(RuntimeException.class, () -> {
+            service.getWeather(weatherRequest);
+        });
+
+        Assertions.assertThat(thrownException.getMessage()).contains("Unexpected error occurred");
     }
 }
