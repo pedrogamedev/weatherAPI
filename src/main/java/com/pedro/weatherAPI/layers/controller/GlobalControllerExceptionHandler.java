@@ -20,14 +20,14 @@ import java.net.URI;
 @RestControllerAdvice
 public class GlobalControllerExceptionHandler {
 
-    @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     @ExceptionHandler(HttpClientErrorException.class)
     public ProblemDetail handleHttpClientErrorException(HttpClientErrorException exception){
         ProblemDetail detail = ProblemDetail.forStatusAndDetail(
-                HttpStatus.TOO_MANY_REQUESTS,
+                HttpStatus.SERVICE_UNAVAILABLE,
                 exception.getMessage()
         );
-        detail.setTitle("Request limit exceeded.");
+        detail.setTitle("VisualCrossingAPI error.");
         detail.setDetail(exception.getMessage());
         detail.setType(URI.create("about:blank"));
         return detail;

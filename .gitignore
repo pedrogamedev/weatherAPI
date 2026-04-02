@@ -32,3 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 /prod.env
+/docker/docker-compose.yml
+/docker/Dockerfile
+/docker/weatherAPI.jar

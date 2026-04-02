@@ -54,7 +54,7 @@ public class WeatherService {
             if(e.getMessage().contains("Bad API Request:No valid locations could be determined from the input")){
                 throw new CityNotFoundException("City "+ request.getLocation() + " not found exception.");
             }
-            throw new HttpClientErrorException(HttpStatus.TOO_MANY_REQUESTS, "3rd party request limit exceeded,");
+            throw new HttpClientErrorException(HttpStatus.SERVICE_UNAVAILABLE, "3rd party API error.");
         }
         enforceLimit();
 

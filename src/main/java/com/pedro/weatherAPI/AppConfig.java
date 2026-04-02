@@ -26,7 +26,7 @@ import java.time.Duration;
 public class AppConfig {
 
 
-    @Value("${redis.password}")
+    @Value("${REDIS_PASSWORD}")
     String password;
     @Bean
     public ObjectMapper objectMapper(){
@@ -42,9 +42,9 @@ public class AppConfig {
     @Bean
     public JedisConnectionFactory redisConnectionFactory(){
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
-        configuration.setHostName("localhost");
+        configuration.setHostName("redis");
         configuration.setPort(6379);
-        configuration.setPassword(RedisPassword.none());
+        configuration.setPassword(password);
         return new JedisConnectionFactory(configuration);
     }
 
