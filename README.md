@@ -1,6 +1,34 @@
+-EM CONSTRUÇÃO-
+
+to add
+visao geral
+techs usadas
+arquitetura
+client side caching
+demo
+testes
+
+# PT-BR
+### Visão Geral
+Um projeto, destinado à aprendizagem pessoal, que implementa Rate Limiting e Client Side Caching com o objetivo de criar uma API robusta voltada para dados climáticos. Para acessar dados climáticos utilizo a API 3rd party [Visual Crossing Weather API](https://www.visualcrossing.com/weather-api/).
+
+Durante o projeto, segui padrões para organizar commits através da especificação Conventional Commits e criei um padronizamento das pastas voltadas à seção de testes.
+
+#### Tecnologias Usadas
+- Java
+- Maven
+- Intellij IDEA
+- Springboot
+- JUnit
+- Mockito
+- Redis
+- Bucket4J
+
+
+
 Como rodar:
 
-!Crie uma conta no openvisual e obtenha uma API KEY!
+!Crie uma conta no [openvisual](https://www.visualcrossing.com/weather-api/) e obtenha uma API KEY!
 
 Manualmente 💻
 Pré-Requisitos
